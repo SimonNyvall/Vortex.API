@@ -2,6 +2,7 @@
 
 open System
 open Vortex.Api
+open Vortex.Http
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
 
@@ -15,7 +16,7 @@ module Tests =
 
         let app = builder.Build()
 
-        let handler context : HttpContext -> obj = Results.Ok("Hello world")
+        let handler: RequestResponse = fun _ -> Results.Ok("Hello world")
 
         // get simple hello world test
         app |> mapGet "/test" handler |> ignore
@@ -23,9 +24,13 @@ module Tests =
         // get query test
         app
         |> mapGet "/query" (fun context ->
-            let id = context |> query "id"
+            let id = context.GetQueryInt "id"
 
             Results.Ok(id))
+        |> ignore
+
+        app
+        |> mapGet "/async" (fun context -> async { return Results.Ok(id) })
         |> ignore
 
         app.Run()
