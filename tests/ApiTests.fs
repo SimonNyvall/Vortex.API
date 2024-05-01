@@ -1,4 +1,4 @@
-module Tests
+module Vortex.Tests.ApiTests
 
 open System
 open Xunit
@@ -31,7 +31,7 @@ let ``Test GET Handler Returns Expected Response`` () =
     let port = getPort ()
     app.Urls.Add($"http://localhost:{port}")
 
-    let handler: RequestResponse = fun _ -> expectedResponse
+    let handler: RequestHandler = fun _ -> expectedResponse
 
     app |> mapGet "/test/helloworld" handler |> ignore
 
@@ -65,7 +65,7 @@ let ``Test POST Handler Returns Expected Response`` () =
     let port = getPort ()
     app.Urls.Add($"http://localhost:{port}")
 
-    let handler: RequestResponse = fun _ -> expectedResponse
+    let handler: RequestHandler = fun _ -> expectedResponse
 
     app
     |> mapPost "/test/helloworld" handler
@@ -102,7 +102,7 @@ let ``Test PUT Handler Returns Expected Response`` () =
     let port = getPort ()
     app.Urls.Add($"http://localhost:{port}")
 
-    let handler: RequestResponse = fun _ -> expectedResponse
+    let handler: RequestHandler = fun _ -> expectedResponse
 
     app |> mapPut "/test/helloworld" handler |> ignore
 
@@ -137,7 +137,7 @@ let ``Test DELETE Handler Returns Expected Response`` () =
     let port = getPort ()
     app.Urls.Add($"http://localhost:{port}")
 
-    let handler: RequestResponse = fun _ -> expectedResponse
+    let handler: RequestHandler = fun _ -> expectedResponse
 
     app
     |> mapDelete "/test/helloworld" handler
