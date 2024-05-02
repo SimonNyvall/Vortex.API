@@ -1,163 +1,165 @@
-module Vortex.Tests.ApiTests
+namespace Vortex.Tests
 
-open System
-open Xunit
-open Microsoft.AspNetCore.Builder
-open Microsoft.Extensions.Hosting
-open System.Net.Http
-open Vortex.Api
+module ApiTests =
 
-let private usedPorts = ref []
+    open System
+    open Xunit
+    open Microsoft.AspNetCore.Builder
+    open Microsoft.Extensions.Hosting
+    open System.Net.Http
+    open Vortex.Api
 
-let rec private getPort () =
-    let random = new Random()
-    let port = random.Next(5000, 6000)
+    let private usedPorts = ref []
 
-    match List.contains port usedPorts.Value with
-    | true -> getPort ()
-    | false ->
-        usedPorts.Value <- port :: usedPorts.Value
-        port
+    let rec private getPort () =
+        let random = new Random()
+        let port = random.Next(5000, 6000)
 
-
-[<Fact>]
-let ``Test GET Handler Returns Expected Response`` () =
-    let builder = WebApplication.CreateBuilder()
-
-    let app = builder.Build()
-
-    let expectedResponse = "Hello, World!"
-
-    let port = getPort ()
-    app.Urls.Add($"http://localhost:{port}")
-
-    let handler: RequestHandler = fun _ -> expectedResponse
-
-    app |> mapGet "/test/helloworld" handler |> ignore
-
-    app.Start()
-
-    use client = new HttpClient(BaseAddress = new Uri($"http://localhost:{port}"))
-
-    async {
-        let! response =
-            client.GetAsync($"http://localhost:{port}/test/helloworld")
-            |> Async.AwaitTask
-
-        let! content =
-            response.Content.ReadAsStringAsync()
-            |> Async.AwaitTask
-
-        Assert.Equal(expectedResponse, content)
-    }
-    |> Async.RunSynchronously
-
-    app.DisposeAsync
+        match List.contains port usedPorts.Value with
+        | true -> getPort ()
+        | false ->
+            usedPorts.Value <- port :: usedPorts.Value
+            port
 
 
-[<Fact>]
-let ``Test POST Handler Returns Expected Response`` () =
-    let builder = WebApplication.CreateBuilder()
+    [<Fact>]
+    let ``Test GET Handler Returns Expected Response`` () =
+        let builder = WebApplication.CreateBuilder()
 
-    let app = builder.Build()
+        let app = builder.Build()
 
-    let expectedResponse = "Hello, World!"
-    let port = getPort ()
-    app.Urls.Add($"http://localhost:{port}")
+        let expectedResponse = "Hello, World!"
 
-    let handler: RequestHandler = fun _ -> expectedResponse
+        let port = getPort ()
+        app.Urls.Add($"http://localhost:{port}")
 
-    app
-    |> mapPost "/test/helloworld" handler
-    |> ignore
+        let handler: RequestHandler = fun _ -> expectedResponse
 
-    app.Start()
+        app |> mapGet "/test/helloworld" handler |> ignore
 
-    use client = new HttpClient(BaseAddress = new Uri($"http://localhost:{port}"))
+        app.Start()
 
-    async {
-        let! response =
-            client.PostAsync($"http://localhost:{port}/test/helloworld", new StringContent(""))
-            |> Async.AwaitTask
+        use client = new HttpClient(BaseAddress = new Uri($"http://localhost:{port}"))
 
-        let! content =
-            response.Content.ReadAsStringAsync()
-            |> Async.AwaitTask
+        async {
+            let! response =
+                client.GetAsync($"http://localhost:{port}/test/helloworld")
+                |> Async.AwaitTask
 
-        Assert.Equal(expectedResponse, content)
-    }
-    |> Async.RunSynchronously
+            let! content =
+                response.Content.ReadAsStringAsync()
+                |> Async.AwaitTask
 
-    app.DisposeAsync
+            Assert.Equal(expectedResponse, content)
+        }
+        |> Async.RunSynchronously
 
-
-[<Fact>]
-let ``Test PUT Handler Returns Expected Response`` () =
-    let builder = WebApplication.CreateBuilder()
-
-    let app = builder.Build()
-
-    let expectedResponse = "Hello, World!"
-
-    let port = getPort ()
-    app.Urls.Add($"http://localhost:{port}")
-
-    let handler: RequestHandler = fun _ -> expectedResponse
-
-    app |> mapPut "/test/helloworld" handler |> ignore
-
-    app.Start()
-
-    use client = new HttpClient(BaseAddress = new Uri($"http://localhost:{port}"))
-
-    async {
-        let! response =
-            client.PutAsync($"http://localhost:{port}/test/helloworld", new StringContent(""))
-            |> Async.AwaitTask
-
-        let! content =
-            response.Content.ReadAsStringAsync()
-            |> Async.AwaitTask
-
-        Assert.Equal(expectedResponse, content)
-    }
-    |> Async.RunSynchronously
-
-    app.DisposeAsync
+        app.DisposeAsync
 
 
-[<Fact>]
-let ``Test DELETE Handler Returns Expected Response`` () =
-    let builder = WebApplication.CreateBuilder()
+    [<Fact>]
+    let ``Test POST Handler Returns Expected Response`` () =
+        let builder = WebApplication.CreateBuilder()
 
-    let app = builder.Build()
+        let app = builder.Build()
 
-    let expectedResponse = "Hello, World!"
+        let expectedResponse = "Hello, World!"
+        let port = getPort ()
+        app.Urls.Add($"http://localhost:{port}")
 
-    let port = getPort ()
-    app.Urls.Add($"http://localhost:{port}")
+        let handler: RequestHandler = fun _ -> expectedResponse
 
-    let handler: RequestHandler = fun _ -> expectedResponse
+        app
+        |> mapPost "/test/helloworld" handler
+        |> ignore
 
-    app
-    |> mapDelete "/test/helloworld" handler
-    |> ignore
+        app.Start()
 
-    app.Start()
+        use client = new HttpClient(BaseAddress = new Uri($"http://localhost:{port}"))
 
-    use client = new HttpClient(BaseAddress = new Uri($"http://localhost:{port}"))
+        async {
+            let! response =
+                client.PostAsync($"http://localhost:{port}/test/helloworld", new StringContent(""))
+                |> Async.AwaitTask
 
-    async {
-        let! response =
-            client.DeleteAsync($"http://localhost:{port}/test/helloworld")
-            |> Async.AwaitTask
+            let! content =
+                response.Content.ReadAsStringAsync()
+                |> Async.AwaitTask
 
-        let! content =
-            response.Content.ReadAsStringAsync()
-            |> Async.AwaitTask
+            Assert.Equal(expectedResponse, content)
+        }
+        |> Async.RunSynchronously
 
-        Assert.Equal(expectedResponse, content)
-    }
-    |> Async.RunSynchronously
+        app.DisposeAsync
 
-    app.DisposeAsync
+
+    [<Fact>]
+    let ``Test PUT Handler Returns Expected Response`` () =
+        let builder = WebApplication.CreateBuilder()
+
+        let app = builder.Build()
+
+        let expectedResponse = "Hello, World!"
+
+        let port = getPort ()
+        app.Urls.Add($"http://localhost:{port}")
+
+        let handler: RequestHandler = fun _ -> expectedResponse
+
+        app |> mapPut "/test/helloworld" handler |> ignore
+
+        app.Start()
+
+        use client = new HttpClient(BaseAddress = new Uri($"http://localhost:{port}"))
+
+        async {
+            let! response =
+                client.PutAsync($"http://localhost:{port}/test/helloworld", new StringContent(""))
+                |> Async.AwaitTask
+
+            let! content =
+                response.Content.ReadAsStringAsync()
+                |> Async.AwaitTask
+
+            Assert.Equal(expectedResponse, content)
+        }
+        |> Async.RunSynchronously
+
+        app.DisposeAsync
+
+
+    [<Fact>]
+    let ``Test DELETE Handler Returns Expected Response`` () =
+        let builder = WebApplication.CreateBuilder()
+
+        let app = builder.Build()
+
+        let expectedResponse = "Hello, World!"
+
+        let port = getPort ()
+        app.Urls.Add($"http://localhost:{port}")
+
+        let handler: RequestHandler = fun _ -> expectedResponse
+
+        app
+        |> mapDelete "/test/helloworld" handler
+        |> ignore
+
+        app.Start()
+
+        use client = new HttpClient(BaseAddress = new Uri($"http://localhost:{port}"))
+
+        async {
+            let! response =
+                client.DeleteAsync($"http://localhost:{port}/test/helloworld")
+                |> Async.AwaitTask
+
+            let! content =
+                response.Content.ReadAsStringAsync()
+                |> Async.AwaitTask
+
+            Assert.Equal(expectedResponse, content)
+        }
+        |> Async.RunSynchronously
+
+        app.DisposeAsync
