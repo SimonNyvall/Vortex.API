@@ -2,12 +2,29 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <Title>Vortex.API. Minimal api wrapper for F#</Title>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="../images/Vortex-logo-512x512.png" Pack="true" Visible="false" PackagePath=""/>
+    <None Include="../README.md" Pack="true" PackagePath=""/>
     <Compile Include="HttpExtension.fs" />
     <Compile Include="Api.fs" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>Vortex.Api</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Simon Nyvall</Authors>
+    <Description>A minimal api wrapper for F#, that makes endpoints and handlers feel more functional.</Description>
+    <RepositoryUrl>https://github.com/SimonNyvall/Vortex</RepositoryUrl>
+    <PackageTags>mininal-api f#</PackageTags>
+    <PackageProjectUrl>https://github.com/SimonNyvall/Vortex</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>Vortex-logo-512x512.png</PackageIcon>
+  </PropertyGroup>
 
 </Project>
