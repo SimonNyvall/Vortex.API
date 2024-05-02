@@ -23,17 +23,15 @@ open Vortex.Api
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
 
-let handler (context: HttpContext) = 
-    async {
+let getHandler: RequestHandler = fun _ -> 
         // Logic to handle the request
-        return "Hello World!"
-    } |> Async.StartAsTask
+        "Hello, World!"
 
 let configureApp (app: WebApplication) =
-    app |> mapGet "/api/hello" handler
-        |> mapPost "/api/post" handler
-        |> mapPut "/api/put" handler
-        |> mapDelete "/api/delete" handler
+    app |> mapGet "/api/hello" getHandler
+        |> mapPost "/api/post" postHandler
+        |> mapPut "/api/put" putHandler
+        |> mapDelete "/api/delete" delHandler
 
     app.Run()
 ```
@@ -44,6 +42,7 @@ let configureApp (app: WebApplication) =
 Vortex.Http enhances the HttpContext by providing extension methods that facilitate easier access to services, request headers, cookies, and query parameters. It simplifies operations such as retrieving and deserializing request bodies and extracting service instances or loggers from the dependency injection container.
 
 ### Extension Methods
+`NOTE`: The extension methods are available through the `Vortex.Http` namespace.
 
 #### Logging and Services
 
@@ -76,21 +75,22 @@ Here are a few examples of how Vortex.Http can be used within your ASP.NET Core 
 open Vortex.Http
 open Microsoft.AspNetCore.Http
 
-let exampleHandler (context: HttpContext) =
-    async {
-        let logger = context.GetLogger<YourServiceType>()
-        let service = context.GetService<YourServiceType>()
-        let headerValue = context.GetHeader "User-Agent"
+let exampleHandler: RequestHandler = fun context -> // RequestHandler is a type alias for HttpContext -> obj
+    let logger = context.GetLogger<YourServiceType>()
+    let service = context.GetService<YourServiceType>()
+    let headerValue = context.GetHeader "User-Agent"
 
-        // Log and return the header value
-        logger.LogInformation("Received user-agent: {HeaderValue}", headerValue)
-        return headerValue
-    } |> Async.StartAsTask
+    // Log and return the header value
+    logger.LogInformation("Received user-agent: {HeaderValue}", headerValue)
+
+    headerValue
 ```
 
 ## Installation
+Add the Vortex.Api package to your project using the following command:
+
 ``` sh
-dotnet add package Vortex
+dotnet add package Vortex.Api --version 0.1.0
 ```
 
 ## Contributing
