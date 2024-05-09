@@ -1,4 +1,4 @@
-# Vortex.Api - F# Minimal API Wrapper [![.NET](https://github.com/SimonNyvall/Vortex/actions/workflows/dotnet.yml/badge.svg)](https://github.com/SimonNyvall/Vortex/actions/workflows/dotnet.yml)
+# Vortex.Api - F# Minimal API Wrapper [![.NET](https://github.com/SimonNyvall/Vortex/actions/workflows/dotnet.yml/badge.svg)](https://github.com/SimonNyvall/Vortex/actions/workflows/dotnet.yml) ![NuGet Downloads](https://img.shields.io/nuget/dt/Vortex.Api)
 
 <div align="center">
     <img src="./images/Vortex-logo.png" width="250">
