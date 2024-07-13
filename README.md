@@ -1,20 +1,33 @@
-# Vortex.Api - F# Minimal API Wrapper [![.NET](https://github.com/SimonNyvall/Vortex/actions/workflows/dotnet.yml/badge.svg)](https://github.com/SimonNyvall/Vortex/actions/workflows/dotnet.yml) ![NuGet Downloads](https://img.shields.io/nuget/dt/Vortex.Api?style=flat&logo=nuget&logoColor=blue&label=Nuget%20Downloads)
-
 <div align="center">
     <img src="./images/Vortex-logo.png" width="250">
 </div>
 
-## Overview
+<div align="center">
+    <h1> Vortex.Api</h1>
+    <h3>F# Minimal API Wrapper</h3>
+    <img src="https://img.shields.io/github/actions/workflow/status/SimonNyvall/Vortex/dotnet.yml?label=test%2Fbuild">
+    <img src="https://img.shields.io/nuget/dt/Vortex.Api?style=flat&logo=nuget&logoColor=blue&label=Nuget%20Downloads">
+</div>
+
+<hr/>
+
+## Premise 🌀
 
 Vortex.Api provides a simple and effective way to configure routing for HTTP methods such as GET, POST, PUT, and DELETE within an F# application using the ASP.NET Core Minimal APIs. This module is designed to simplify the process of binding HTTP methods to specific request handlers.
 
-## Installation
+## Installation 💻
 
 To use the `Vortex.Api` module, include it in your F# project by copying the source files directly or referencing the library if it's packaged. Ensure that your project references the `Microsoft.AspNetCore.App` framework.
 
+Add the Vortex.Api package to your project using the following command:
+
+``` sh
+$ dotnet add package Vortex.Api --version 0.1.0
+```
+
 ## Usage
 
-### Configuring the Web Application
+### Example: Configuring the Web Application
 
 Here's how to use the `Vortex.Api` to map different HTTP methods:
 
@@ -28,9 +41,9 @@ let getHandler: RequestHandler = fun _ ->
         "Hello, World!"
 
 let configureApp (app: WebApplication) =
-    app |> mapGet "/api/hello" getHandler
-        |> mapPost "/api/post" postHandler
-        |> mapPut "/api/put" putHandler
+    app |> mapGet    "/api/hello"  getHandler
+        |> mapPost   "/api/post"   postHandler
+        |> mapPut    "/api/put"    putHandler
         |> mapDelete "/api/delete" delHandler
 
     app.Run()
@@ -68,7 +81,6 @@ Vortex.Http enhances the HttpContext by providing extension methods that facilit
 - `GetQueryUri(name: string)`: Converts the first value of a specified query parameter to a `Uri` object. Includes handling for `UriFormatException`.
 - `GetQueryList(name: string)`: Retrieves all values of a specified query parameter as a list of strings, allowing for multiple values per query parameter.
 
-### Usage
 Here are a few examples of how Vortex.Http can be used within your ASP.NET Core handlers:
     
 ```fsharp
@@ -86,15 +98,8 @@ let exampleHandler: RequestHandler = fun context -> // RequestHandler is a type 
     headerValue
 ```
 
-## Installation
-Add the Vortex.Api package to your project using the following command:
-
-``` sh
-dotnet add package Vortex.Api --version 0.1.0
-```
-
 ## Contributing
 Contributions are welcome! Please refer to the TODO.md or create an issue to get started.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the [MIT License](./LICENSE) - see the LICENSE file for details.
